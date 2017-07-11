@@ -3,7 +3,7 @@ var example = (function(){
 
   // create a scene
   var scene = new THREE.Scene(),
-  renderer = new THREE.WebGLRenderer(),
+  renderer = window.WebGLRenderingContext ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer(),
   light = new THREE.AmbientLight(0xffffff),
   camera,
   box;
@@ -24,5 +24,29 @@ var example = (function(){
 
     camera.position.z = 100;
     scene.add(camera);
+
+    box = new THREE.Mesh(
+      new THREE.BoxGeometry(20, 20, 20),
+      new THREE.MeshBasicMaterial({ color: 0x2E4272 })
+    );
+
+    box.name = "box";
+    scene.add(box);
+
+    render()
+  }
+
+  function render(){
+    box.rotation.y += 0.01;
+    box.rotation.x += 0.01;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+  }
+
+  window.onload = initScene;
+
+  return {
+    scene: scene
   }
 })();
